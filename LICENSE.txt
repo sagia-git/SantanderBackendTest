@@ -1,0 +1,15 @@
+Licencia de Uso Limitado para Evaluación Técnica
+
+Este código ha sido desarrollado exclusivamente para fines de evaluación técnica en el proceso de selección. 
+
+Queda expresamente prohibido:
+
+1. El uso comercial del código, total o parcial, por parte de cualquier persona física o moral.
+2. La reproducción, distribución, modificación o publicación del código fuera del contexto del proceso de selección.
+3. La incorporación del código en productos, servicios, plataformas o sistemas internos o externos.
+
+El receptor del código acepta utilizarlo únicamente para evaluar las habilidades técnicas del autor y se compromete a no emplearlo para ningún otro propósito.
+
+Cualquier uso no autorizado será considerado una violación de los derechos del autor y podrá estar sujeto a acciones legales.
+
+© Santiago Alejandro Manzano Beltrán 2025
