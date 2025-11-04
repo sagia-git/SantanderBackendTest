@@ -1,5 +1,4 @@
 ﻿using HackerNews.WebAPI.Models;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using System.Threading.RateLimiting;
 

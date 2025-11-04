@@ -4,8 +4,11 @@ using Microsoft.Extensions.Options;
 namespace HackerNews.WebAPI.Midlewares;
 
 public class HackerNewsRateLimitingHandler(
-    IOptions<HackerNewsOptions> options) : DelegatingHandler
+    IOptions<HackerNewsOptions> options,
+    ILogger<HackerNewsRateLimitingHandler> logger
+    ) : DelegatingHandler
 {
+    private readonly ILogger<HackerNewsRateLimitingHandler> _logger = logger;
     private readonly SemaphoreSlim _semaphore = new(options.Value.MaxConcurrentRequests);
 
     protected override async Task<HttpResponseMessage> SendAsync(
@@ -21,8 +24,8 @@ public class HackerNewsRateLimitingHandler(
                 .SendAsync(request, cancellationToken);
         }
         catch (Exception ex)
-        { 
-            Console.WriteLine(ex);
+        {
+            _logger.LogError(ex, "Error occurred while processing request to {Uri}", request.RequestUri);
             throw;
         }
         finally

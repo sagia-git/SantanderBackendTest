@@ -8,6 +8,8 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddConsole();
+
 // Add Options
 var hackerNewsOptions = builder.Configuration
     .GetSection(nameof(HackerNewsOptions))
@@ -35,9 +37,11 @@ builder.Services.AddHttpClient(hackerNewsOptions.HttpClientName, client =>
 {
     var options = serviceProvider.GetRequiredService<IOptions<HackerNewsOptions>>();
 
+    var logger = serviceProvider.GetRequiredService<ILogger<HttpResponseMessage>>();
+
     return options is null
         ? throw new InvalidOperationException($"{nameof(HackerNewsOptions)} not registered in DI.")
-        : HttpClientPolicies.GetRetryPolicy(options);
+        : HttpClientPolicies.GetRetryPolicy(options,logger);
 });
 
 
@@ -70,6 +74,8 @@ app.UseRateLimiter();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

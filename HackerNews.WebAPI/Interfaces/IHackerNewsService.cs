@@ -4,5 +4,5 @@ namespace HackerNews.WebAPI.Interfaces;
 
 public interface IHackerNewsService 
 {
-    Task<List<StoryDto>>GetBestStoriesAsync(int count);
+    Task<List<StoryDto>>GetBestStoriesAsync(int storiesCount);
 }

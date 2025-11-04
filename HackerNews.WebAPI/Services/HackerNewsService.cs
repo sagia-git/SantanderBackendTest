@@ -7,9 +7,11 @@ namespace HackerNews.WebAPI.Services;
 
 public class HackerNewsService(
         IHttpClientFactory httpClientFactory,
-        IOptions<HackerNewsOptions> options
+        IOptions<HackerNewsOptions> options,
+        ILogger<HackerNewsService> logger
     ) : IHackerNewsService
 {
+    private readonly ILogger<HackerNewsService> _logger = logger;
 
     public async Task<List<StoryDto>> GetBestStoriesAsync(int storiesCount)
     {
@@ -37,7 +39,7 @@ public class HackerNewsService(
     }
 
 
-    private static async Task<IEnumerable<int>> FetchBestStoryIdsAsync(
+    private async Task<IEnumerable<int>> FetchBestStoryIdsAsync(
         HttpClient httpClient,
         string bestStoriesEndpoint,
         int storiesCount)
@@ -56,7 +58,7 @@ public class HackerNewsService(
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            _logger.LogError(ex, "Failed to fetch best story IDs from {endpoint}", bestStoriesEndpoint);
             throw;
         }
     }
@@ -67,11 +69,11 @@ public class HackerNewsService(
         string storyDetailEndpoint,
         IEnumerable<int> storyIds)
     {
-        return storyIds.Select(async id =>
+        return storyIds.Select(async storyId =>
         {
             try
             {
-                var storyEndpoint = string.Format(storyDetailEndpoint, id);
+                var storyEndpoint = string.Format(storyDetailEndpoint, storyId);
 
                 var response = await httpClient
                     .GetAsync(storyEndpoint);
@@ -88,7 +90,7 @@ public class HackerNewsService(
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogWarning(ex, "Failed to fetch story details for ID {storyId}", storyId);
                 return null;
             }
         });
